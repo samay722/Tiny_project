@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+httpx
+groq
+python-dotenv
+sqlalchemy
+python-multipart
+pydantic[email]
+twilio
