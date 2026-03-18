@@ -8,7 +8,7 @@ import AgenticAI from './pages/AgenticAI';
 import Dashboard from './pages/Dashboard';
 import Automation from './pages/Automation';
 
-const TABS = ['Symptom Checker', 'Vision AI', 'RAG Knowledge', 'Agentic AI', 'Dashboard', 'Automation'];
+const TABS = ['Dashboard', 'Symptom Checker', 'Vision AI', 'RAG Knowledge', 'Agentic AI', 'Automation'];
 
 export default function App() {
   // Check if already logged in from a previous session
@@ -16,10 +16,11 @@ export default function App() {
     try { return JSON.parse(localStorage.getItem('medai_user')); }
     catch { return null; }
   });
-  const [activeTab, setActiveTab] = useState('Symptom Checker');
+  const [activeTab, setActiveTab] = useState('Dashboard');
 
   const handleLogin = (userData) => {
     setUser(userData);
+    setActiveTab('Dashboard');
   };
 
   const handleLogout = () => {
@@ -40,7 +41,7 @@ export default function App() {
       case 'Agentic AI':      return <AgenticAI />;
       case 'Dashboard':       return <Dashboard />;
       case 'Automation':      return <Automation />;
-      default:                return <SymptomChecker />;
+      default:                return <Dashboard />;
     }
   };
 
