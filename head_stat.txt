@@ -1,0 +1,8 @@
+﻿commit fa2da88b3bdd5bce4d3a0f9a2dfc7b58fb1f6d45
+Author: Samay Parashar <samayparashar@gmail.com>
+Date:   Thu Mar 19 16:06:30 2026 +0530
+
+    test: add integration test for FastAPI router health checks
+
+ backend/tests/test_api_integration.py | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)

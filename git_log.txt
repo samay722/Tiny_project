@@ -1,0 +1,8 @@
+﻿fa2da88 test: add integration test for FastAPI router health checks
+b8a71a8 test: verify communication service handles missing API keys gracefully
+43b1a76 test: add mock tests for LLM symptom analysis
+7ffbef7 test: add unit tests for image validation (vision_service)
+6ef87a9 docs: update README with features and architectural overview
+36c2a3d Update default tab to Dashboard after login
+b7163dc Add README.md
+3330cb6 Initial commit

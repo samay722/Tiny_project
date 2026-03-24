@@ -60,12 +60,12 @@ graph TD
 1. Navigate to `/backend`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Configure your `.env` file (Add `GROQ_API_KEY`)
-4. Start the server: `uvicorn main:app --reload`
+4. Start the server: `uvicorn api_server:app --reload`
 
 ### 🎨 Frontend Setup
 1. Navigate to `/frontend`
 2. Install dependencies: `npm install`
-3. Start the dev server: `npm run dev`
+3. Start the dev server: `npm start`
 
 ---
 

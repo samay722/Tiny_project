@@ -1,3 +1,4 @@
+
 import pytest
 from services.vision_service import validate_image, detect_scan_type, get_image_info
 import io

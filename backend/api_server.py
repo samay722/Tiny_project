@@ -1,6 +1,6 @@
 """
-main.py — MedAI FastAPI Backend Entry Point
-Run: uvicorn main:app --reload --port 8000
+api_server.py — MedAI FastAPI Backend Entry Point
+Run: uvicorn api_server:app --reload --port 8000
 """
 
 from fastapi import FastAPI
@@ -45,4 +45,4 @@ def health():
     return {"status": "ok"}
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("api_server:app", host="0.0.0.0", port=8000, reload=True)

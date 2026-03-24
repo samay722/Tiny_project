@@ -7,3 +7,6 @@ sqlalchemy
 python-multipart
 pydantic[email]
 twilio
+pytest
+pytest-asyncio
+httpx

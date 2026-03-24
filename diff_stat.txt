@@ -1,0 +1,10 @@
+﻿ README.md                             |   4 +-
+ backend/main.py                       |  48 -----------
+ backend/requirements.txt              |   3 +
+ backend/services/rag_service.py       | 158 ++++++++++++++++++++++++++++++++++
+ backend/tests/test_api_integration.py |   2 +-
+ backend/tests/test_vision_service.py  |   1 +
+ backend/utils/error_handler.py        |  54 ++++++++++++
+ backend/utils/stats_tracker.py        |  90 +++++++++++++++++++
+ frontend/README.md                    |  59 +++++++++++++
+ 9 files changed, 368 insertions(+), 51 deletions(-)
