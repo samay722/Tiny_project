@@ -126,3 +126,5 @@ if __name__ == "__main__":
         print("librosa is available - ready for audio analysis!")
     else:
         print("Install librosa first!")
+
+# Phase 1: Setting up Signal Processing with Librosa
