@@ -27,19 +27,6 @@ class FaceStressModel:
             emotions = result['emotion']
             dominant = result['dominant_emotion']
             
-            # ---------------------------------------------
-            # Enforce detection to find a face
-            results = DeepFace.analyze(
-                img_path=frame_path, 
-                actions=['emotion'],
-                enforce_detection=True,
-                detector_backend='opencv'
-            )
-            
-            # DeepFace returns a list of results
-            emotions = results[0]['emotion']
-            dominant = results[0]['dominant_emotion']
-            
             # --- AI/ML UPGRADE: Valence-Arousal Mapping ---
             # Weights based on Russel's Circumplex Model (Stress = High Arousal, Low Valence)
             # Emotion | Valence (-1 to 1) | Arousal (0 to 1)
@@ -71,7 +58,7 @@ class FaceStressModel:
             # We simulate a pulse check by analyzing the Green channel intensity variance
             # In a real real-time feed, we'd use a buffer of 150 frames.
             # Here, we analyze the spatial variance in the green channel as a 'Stress-Bio-Marker'
-            green_intensity = np.mean(results[0].get('region', {}).get('w', 100)) # Placeholder for signal
+            green_intensity = np.mean(result.get('region', {}).get('w', 100)) # Placeholder for signal
             # Simulate a BPM between 65-110 based on arousal
             bpm = int(70 + (weighted_a * 40)) 
             
@@ -80,15 +67,22 @@ class FaceStressModel:
                 "dominant_emotion": dominant,
                 "heart_rate": bpm,
                 "details": {
-                    "valence": round(weighted_v, 2), 
-                    "arousal": round(weighted_a, 2),
-                    "gaze_stability": "High" if weighted_a < 0.5 else "Fixated"
+                    "valence": round(float(weighted_v), 2), 
+                    "arousal": round(float(weighted_a), 2),
+                    "gaze_stability": "High" if float(weighted_a) < 0.5 else "Fixated"
                 }
             }
             
         except Exception as e:
+            import traceback
             print(f"DeepFace Prediction Error: {e}")
-            return {"score": 50, "dominant_emotion": "error", "error": str(e)}
+            traceback.print_exc()
+            return {
+                "score": 45, 
+                "dominant_emotion": "neutral (undetected)", 
+                "heart_rate": 72,
+                "error": str(e)
+            }
 
 if __name__ == "__main__":
     # Test block

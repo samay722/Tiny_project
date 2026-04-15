@@ -278,7 +278,7 @@ def get_history():
     })
 
 if __name__ == '__main__':
-    # Run the server locally on port 5000
+    # Run the server locally on port 5001
     print("Starting API Backend... ML routes enabled")
     # Disabling debug/reloader for Windows stability with heavy ML models
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5001, debug=False)

@@ -1,5 +1,5 @@
 // Configuration
-const API_URL = 'http://localhost:5000';
+const API_URL = 'http://127.0.0.1:5001';
 
 // Colors for Dynamic UI
 const COLORS = {
@@ -137,9 +137,9 @@ async function sendToBackend(endpoint, payload, isFormData = false) {
 
         const res = await fetch(`${API_URL}${endpoint}`, options);
         const data = await res.json();
+        console.log("AI Backend Response:", data);
         
         // Update Results UI
-        // We prioritze the Global Score for the center gauge, but show local source context
         if (data.source === 'face') {
             document.getElementById('val-bpm').innerText = data.heart_rate || '--';
             document.getElementById('val-gaze').innerText = data.details?.gaze_stability || '--';
@@ -149,7 +149,7 @@ async function sendToBackend(endpoint, payload, isFormData = false) {
         fetchHistory(); // Refresh chart
         
     } catch (err) {
-        console.error("Backend Error. Make sure Flask is running on port 5000.", err);
+        console.error("Backend Error. Make sure Flask is running on port 5001.", err);
         alert("Could not reach the NeuroSense backend. Is app.py running?");
     } finally {
         hideLoader();
@@ -489,6 +489,9 @@ async function fetchHistory() {
                 document.getElementById(`bar-${type.toLowerCase()}`).style.width = `${lastOfThisType.score}%`;
             }
         });
+
+        // 4. Update AI Profile Section
+        updateProfile([...data.history]); // Use spread to avoid side-effects from chart reversal
 
     } catch (err) {
         console.log("Could not load history yet.");
