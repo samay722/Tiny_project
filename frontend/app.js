@@ -510,3 +510,4 @@ window.onload = () => {
     // Try fetch history on load
     fetchHistory();
 };
+
