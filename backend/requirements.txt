@@ -10,3 +10,5 @@ tf-keras
 requests
 scipy
 numpy
+reportlab
+scikit-learn
