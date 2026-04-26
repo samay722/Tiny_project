@@ -4,33 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeuroSense AI | Cybernetic Stress Intelligence</title>
-    
-    <!-- Premium Typography -->
+    <meta name="description" content="Real-time multi-modal biometric stress analysis powered by AI — face, voice, and cognitive fusion.">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- Chart.js Engine -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Live Generative Neural Background -->
-    <canvas id="neural-canvas"></canvas>
+    <!-- Slouch Warning Overlay -->
+    <div id="slouch-warning-overlay">⚠️ SIT UP STRAIGHT!<br><span style="font-size:1rem;font-weight:normal;">Ergonomic posture failure detected. Screen locked until posture restored.</span></div>
 
-    <!-- Executive Header -->
-    <header class="glass-header">
-        <div class="logo">
-            <span class="logo-icon">🧬</span>
-            <h1>NeuroSense <span class="highlight">Core</span></h1>
+    <!-- Neural Background Canvas -->
+    <canvas id="neural-canvas"></canvas>
+    <div id="toast-container"></div>
+
+    <!-- Breathing Exercise Modal -->
+    <div id="breathing-modal">
+        <div class="breath-box">
+            <h3 style="margin-bottom:1.5rem;font-family:var(--font-heading);letter-spacing:2px;">🧘 Neural Calm Protocol</h3>
+            <div id="breath-circle"></div>
+            <p id="breath-label" style="font-size:1.6rem;font-weight:700;margin-top:2rem;letter-spacing:2px;">Inhale...</p>
+            <p id="breath-counter" style="color:var(--text-muted);margin-top:0.5rem;font-size:0.85rem;">Cycle 1 / 4</p>
+            <button id="btn-skip-breath" class="btn btn-secondary" style="width:auto;padding:0.6rem 2rem;margin-top:2rem;">Skip</button>
         </div>
-        <p class="subtitle">Next-Gen Multi-Modal Biometric Matrix</p>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div class="logo">
+                <span class="logo-icon">🧬</span>
+                <h1>NeuroSense <span class="highlight">Core</span></h1>
+            </div>
+            <p class="subtitle">Next-Gen Multi-Modal Biometric Matrix</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:20px;">
+            <!-- Flow State Badge -->
+            <div id="flow-state-badge" style="background:rgba(16, 185, 129, 0.1); border:1px solid rgba(16, 185, 129, 0.3); padding:0.5rem 1rem; border-radius:20px; display:flex; align-items:center; gap:8px;">
+                <span style="font-size:1.2rem;">🌊</span>
+                <span style="color:var(--safe); font-weight:bold; font-size:0.9rem;">Flow State: <span id="flow-streak-val">0</span>m</span>
+            </div>
+            <div id="api-status-dot" title="Backend Status" style="position:relative; width:12px;height:12px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px #ef4444;transition:all 0.5s;"></div>
+        </div>
     </header>
 
     <main class="dashboard">
-        
+
         <!-- MODULES GRID -->
         <section class="card-grid">
-            
+
             <!-- 📷 Visual Matrix -->
             <div class="glass-card module-card" id="card-visual">
                 <div class="card-header">
@@ -39,32 +60,30 @@
                 <div class="video-container">
                     <video id="webcam-feed" autoplay playsinline></video>
                     <div class="overlay-scan"></div>
-                    
-                    <!-- Gaze Visualization Dot -->
-                    <div id="gaze-dot" style="position: absolute; width: 18px; height: 18px; background: var(--accent-secondary); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 20px var(--accent-secondary); border: 2px solid #fff; z-index: 20;"></div>
+                    <div id="gaze-dot"></div>
                     <div id="focus-halo"></div>
 
                     <!-- Calibration Overlay -->
-                    <div id="calibration-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.95); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 30;">
-                        <div class="calibration-target" style="width: 50px; height: 50px; border: 3px solid var(--accent-primary); border-radius: 50%; animation: float 1s infinite alternate;"></div>
-                        <p style="margin-top: 1.5rem; font-weight: 600; letter-spacing: 2px;">CALIBRATING NEURAL FIELD</p>
-                        <p id="calib-timer" style="font-size: 3rem; font-weight: 800; color: var(--accent-primary);">5</p>
+                    <div id="calibration-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(2,6,23,0.95);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:30;">
+                        <div style="width:50px;height:50px;border:3px solid var(--accent-primary);border-radius:50%;animation:float 1s infinite alternate;"></div>
+                        <p style="margin-top:1.5rem;font-weight:600;letter-spacing:2px;">CALIBRATING NEURAL FIELD</p>
+                        <p id="calib-timer" style="font-size:3rem;font-weight:800;color:var(--accent-primary);">5</p>
                     </div>
 
                     <!-- AI Vitals HUD -->
-                    <div id="vitals-overlay" style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 8px 12px; border-radius: 10px; font-family: monospace; font-size: 0.75rem; color: #fff; z-index: 25; border: 1px solid rgba(255,255,255,0.1);">
-                        <div style="margin-bottom: 4px;">💓 HR: <span id="val-bpm" style="color: var(--accent-secondary);">--</span></div>
-                        <div style="margin-bottom: 4px;">👁️ Gaze: <span id="val-gaze" style="color: var(--accent-primary);">--</span></div>
-                        <div style="margin-bottom: 4px;">🧘 Posture: <span id="val-posture" style="color: #6366f1;">Analyzing...</span></div>
-                        <div style="margin-bottom: 4px;">💤 Fatigue: <span id="val-fatigue" style="color: #f472b6;">Alert</span></div>
-                        <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px; padding-top: 4px; color: #94a3b8; font-size: 0.65rem;">
-                            👻 Neural Twin: <span id="val-twin" style="color: #10b981;">--</span>
+                    <div id="vitals-overlay" style="position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,0.75);padding:8px 12px;border-radius:10px;font-family:monospace;font-size:0.75rem;color:#fff;z-index:25;border:1px solid rgba(255,255,255,0.1);">
+                        <div style="margin-bottom:4px;">💓 HR: <span id="val-bpm" style="color:var(--accent-secondary);">--</span></div>
+                        <div style="margin-bottom:4px;">👁️ Gaze: <span id="val-gaze" style="color:var(--accent-primary);">--</span></div>
+                        <div style="margin-bottom:4px;">🧘 Posture: <span id="val-posture" style="color:#6366f1;">Analyzing...</span></div>
+                        <div style="margin-bottom:4px;">💤 Fatigue: <span id="val-fatigue" style="color:#f472b6;">Alert</span></div>
+                        <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:4px;padding-top:4px;color:#94a3b8;font-size:0.65rem;">
+                            👻 Neural Twin: <span id="val-twin" style="color:#10b981;">--</span>
                         </div>
                     </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
-                    <input type="checkbox" id="privacy-toggle" style="accent-color: var(--accent-primary); width: 18px; height: 18px;">
-                    <label for="privacy-toggle" style="font-size: 0.85rem; color: var(--text-muted);">Enable Neural Privacy Obfuscation</label>
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+                    <input type="checkbox" id="privacy-toggle" style="accent-color:var(--accent-primary);width:18px;height:18px;">
+                    <label for="privacy-toggle" style="font-size:0.85rem;color:var(--text-muted);">Enable Neural Privacy Obfuscation</label>
                 </div>
                 <button class="btn btn-primary" id="btn-analyze-face">Scan Neural Field</button>
             </div>
@@ -74,15 +93,17 @@
                 <div class="card-header">
                     <h3>🎙️ Vocal Analysis</h3>
                 </div>
-                <div class="audio-container" style="height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4);">
-                    <div class="visualizer" id="audio-visualizer" style="display: flex; gap: 6px; height: 60px; align-items: flex-end;">
-                        <span class="bar" style="width: 8px; background: var(--accent-primary); border-radius: 4px; height: 10px;"></span>
-                        <span class="bar" style="width: 8px; background: var(--accent-primary); border-radius: 4px; height: 10px;"></span>
-                        <span class="bar" style="width: 8px; background: var(--accent-primary); border-radius: 4px; height: 10px;"></span>
+                <div class="audio-container" style="height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);">
+                    <div class="visualizer" id="audio-visualizer" style="display:flex;gap:6px;height:60px;align-items:flex-end;">
+                        <span class="bar" style="width:8px;background:var(--accent-primary);border-radius:4px;height:10px;transition:height 0.08s;"></span>
+                        <span class="bar" style="width:8px;background:var(--accent-secondary);border-radius:4px;height:10px;transition:height 0.08s;"></span>
+                        <span class="bar" style="width:8px;background:var(--accent-primary);border-radius:4px;height:10px;transition:height 0.08s;"></span>
+                        <span class="bar" style="width:8px;background:var(--accent-secondary);border-radius:4px;height:10px;transition:height 0.08s;"></span>
+                        <span class="bar" style="width:8px;background:var(--accent-primary);border-radius:4px;height:10px;transition:height 0.08s;"></span>
                     </div>
-                    <p id="recording-time" style="font-family: monospace; font-size: 1.5rem; margin-top: 1rem; color: var(--accent-secondary);">00:00</p>
+                    <p id="recording-time" style="font-family:monospace;font-size:1.5rem;margin-top:1rem;color:var(--accent-secondary);">00:00</p>
                 </div>
-                <div style="display: flex; gap: 1rem;">
+                <div style="display:flex;gap:1rem;">
                     <button class="btn btn-secondary" id="btn-mic-start">🎤 Record</button>
                     <button class="btn btn-primary" id="btn-analyze-voice" disabled>Analyze Pitch</button>
                 </div>
@@ -94,9 +115,9 @@
                     <h3>📝 Cognitive Analysis</h3>
                 </div>
                 <div class="text-container">
-                    <textarea id="nlp-text" placeholder="Stream of consciousness entry..." style="width: 100%; height: 220px; background: transparent; border: none; color: #fff; padding: 1.5rem; resize: none; font-family: var(--font-body);"></textarea>
+                    <textarea id="nlp-text" placeholder="Stream of consciousness entry..." style="width:100%;height:220px;background:transparent;border:none;color:#fff;padding:1.5rem;resize:none;font-family:var(--font-body);"></textarea>
                 </div>
-                <div id="nlp-result" style="margin-bottom: 1rem; min-height: 24px; font-size: 0.9rem;"></div>
+                <div id="nlp-result" style="margin-bottom:1rem;min-height:24px;font-size:0.9rem;"></div>
                 <button class="btn btn-primary" id="btn-analyze-text">Extract Sentiment</button>
             </div>
 
@@ -105,7 +126,7 @@
         <!-- ANALYTICS SUITE -->
         <section class="glass-card analytics-section">
             <h2 class="section-title">📊 Intelligence Dashboard</h2>
-            
+
             <div class="results-layout">
                 <!-- Gauge -->
                 <div class="meter-container">
@@ -115,102 +136,153 @@
                             <span class="score-label">FUSION INDEX</span>
                         </div>
                     </div>
-                    <div class="status-badge" id="stress-status" style="margin-top: 1.5rem; font-weight: 600; text-transform: uppercase;">Awaiting Input</div>
-                    <div id="burnout-badge" style="font-size: 0.7rem; color: #94a3b8; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Burnout Risk: <span id="val-burnout" style="color: #10b981;">Analyzing...</span></div>
-                    
+                    <div class="status-badge" id="stress-status" style="margin-top:1.5rem;font-weight:600;text-transform:uppercase;">Awaiting Input</div>
+                    <div id="burnout-badge" style="font-size:0.7rem;color:#94a3b8;margin-top:5px;text-transform:uppercase;letter-spacing:1px;">
+                        Burnout Risk: <span id="val-burnout" style="color:#10b981;">Analyzing...</span>
+                    </div>
+
                     <div class="modality-breakdown">
-                        <div class="breakdown-item">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">
-                                <span>Visual</span>
-                                <span>Vocal</span>
-                                <span>Cognitive</span>
+                        <div style="display:flex;justify-content:space-between;font-size:0.75rem;text-transform:uppercase;color:var(--text-muted);">
+                                <span>Visual</span><span>Vocal</span><span>Cognitive</span>
                             </div>
-                            <div style="display: flex; gap: 8px; margin-top: 5px;">
+                            <div style="display:flex;gap:8px;margin-top:5px;">
                                 <div class="mini-bar"><div id="bar-face"></div></div>
                                 <div class="mini-bar"><div id="bar-voice"></div></div>
                                 <div class="mini-bar"><div id="bar-text"></div></div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Forecast Widget -->
+                    <div style="margin-top:1.5rem;padding:1rem;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(255,255,255,0.05);text-align:center;">
+                        <p style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Stress Forecast (Next Scan)</p>
+                        <p id="val-forecast" style="font-size:1.8rem;font-weight:800;color:var(--accent-primary);margin:0.3rem 0;">--</p>
+                        <p id="forecast-trend" style="font-size:0.75rem;color:var(--text-muted);">Awaiting data...</p>
+                    </div>
                 </div>
 
-                <!-- History -->
+                <!-- History Chart -->
                 <div class="chart-container">
-                    <h3 style="margin-bottom: 1.5rem; font-family: var(--font-heading);">Biometric Timeline</h3>
+                    <h3 style="margin-bottom:1.5rem;font-family:var(--font-heading);">Biometric Timeline</h3>
                     <canvas id="historyChart"></canvas>
-                    <button class="btn btn-secondary" id="btn-download-report" style="margin-top: 2rem; width: auto;">📥 Export Report (PDF)</button>
+                    <div style="display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;">
+                        <button class="btn btn-secondary" id="btn-download-report" style="width:auto;flex:1;">📥 Export PDF</button>
+                        <button class="btn btn-secondary" id="btn-export-csv" style="width:auto;flex:1;">📊 Export CSV</button>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Smart Tip Panel -->
+            <div id="smart-tip-panel" style="margin-top:2rem;padding:1.2rem 1.5rem;background:rgba(129,140,248,0.08);border-left:4px solid var(--accent-primary);border-radius:12px;display:none;">
+                <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent-primary);margin-bottom:0.4rem;">🤖 AI Recommendation</p>
+                <p id="smart-tip-text" style="font-size:0.95rem;color:#e2e8f0;line-height:1.6;"></p>
             </div>
         </section>
 
-        <!-- ELITE INTELLIGENCE REPORT -->
-        <section class="glass-card" style="margin-bottom: 3rem; border-left: 4px solid var(--accent-secondary);">
+        <!-- NEURAL INTELLIGENCE REPORT -->
+        <section class="glass-card" style="margin-bottom:3rem;border-left:4px solid var(--accent-secondary);">
             <h2 class="section-title">🧠 Neural Intelligence Report</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center;">
                 <div class="intel-item">
-                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">HRV Index</p>
-                    <p id="val-hrv" style="font-size: 2rem; font-weight: 800; color: #fff;">--</p>
+                    <p style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">HRV Index</p>
+                    <p id="val-hrv" style="font-size:2rem;font-weight:800;color:#fff;">--</p>
                 </div>
                 <div class="intel-item">
-                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Cognitive Reserve</p>
-                    <p id="val-reserve" style="font-size: 2rem; font-weight: 800; color: var(--accent-primary);">--</p>
+                    <p style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Cognitive Reserve</p>
+                    <p id="val-reserve" style="font-size:2rem;font-weight:800;color:var(--accent-primary);">--</p>
                 </div>
                 <div class="intel-item">
-                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Personal Baseline</p>
-                    <p id="val-baseline" style="font-size: 2rem; font-weight: 800; color: var(--safe);">--</p>
+                    <p style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Personal Baseline</p>
+                    <p id="val-baseline" style="font-size:2rem;font-weight:800;color:var(--safe);">--</p>
                 </div>
                 <div class="intel-item">
-                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Fatigue Risk</p>
-                    <p id="val-fatigue-risk" style="font-size: 2rem; font-weight: 800; color: #fff;">Low</p>
+                    <p style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Fatigue Risk</p>
+                    <p id="val-fatigue-risk" style="font-size:2rem;font-weight:800;color:#fff;">Low</p>
                 </div>
+            </div>
+
+            <!-- Daily Goal -->
+            <div style="margin-top:2rem;padding:1.5rem;background:rgba(0,0,0,0.25);border-radius:16px;">
+                <p style="font-size:0.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:1rem;">🎯 Daily Stress Goal</p>
+                <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;">
+                    <label style="font-size:0.85rem;color:var(--text-muted);">Max score target:</label>
+                    <input type="number" id="goal-input" min="10" max="100" value="50" style="width:80px;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.3);color:white;font-size:1rem;">
+                    <button id="btn-set-goal" class="btn btn-secondary" style="width:auto;padding:0.5rem 1.2rem;">Set Goal</button>
+                </div>
+                <div style="background:rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;height:10px;">
+                    <div id="goal-progress-bar" style="height:100%;width:0%;background:#10b981;transition:width 0.8s ease,background 0.5s;border-radius:8px;"></div>
+                </div>
+                <p id="goal-progress-label" style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;">-- / -- (0%)</p>
             </div>
         </section>
 
         <!-- SECONDARY SYSTEMS -->
         <section class="card-grid">
+
             <!-- Radar Profile -->
             <div class="glass-card module-card">
                 <div class="card-header">
                     <h3>🧬 Neuro-Signature</h3>
                 </div>
-                <div id="profile-details" style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
-                    <canvas id="radarChart" style="max-width: 220px;"></canvas>
-                    <div id="profile-text" style="text-align: center; font-size: 0.85rem; color: var(--text-muted);">Analyzing signatures...</div>
+                <div id="profile-details" style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;">
+                    <canvas id="radarChart" style="max-width:220px;"></canvas>
+                    <div id="profile-text" style="text-align:center;font-size:0.85rem;color:var(--text-muted);">Analyzing signatures...</div>
                 </div>
             </div>
 
-            <!-- AI Engine Control -->
+            <!-- AI Focus Timer -->
             <div class="glass-card module-card">
                 <div class="card-header">
-                    <h3>🎧 Ambient Engine</h3>
-                    <div id="sound-status" style="font-size: 0.75rem; font-weight: 600; color: var(--accent-primary);">IDLE</div>
+                    <h3>⏱️ AI Focus Timer</h3>
+                    <div id="focus-status" style="font-size:0.75rem;font-weight:600;color:var(--accent-primary);">IDLE</div>
                 </div>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Neural-matched audio frequencies to modulate cognitive load.</p>
-                <button class="btn btn-primary" id="btn-toggle-sound">Initialize Audio Stream</button>
-                <audio id="ambient-player" loop></audio>
+                <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Duration auto-adjusts to your current stress level.</p>
+                <div style="text-align:center;padding:1.5rem 0;">
+                    <p id="focus-timer-display" style="font-size:4rem;font-weight:800;font-family:var(--font-heading);letter-spacing:4px;color:#fff;">--:--</p>
+                    <p id="focus-mode-label" style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;">Start to calibrate</p>
+                </div>
+                <button class="btn btn-primary" id="btn-focus-timer">▶ Start Focus</button>
+                <button class="btn btn-secondary" id="btn-trigger-breath" style="margin-top:0.75rem;">🧘 Manual Breathing</button>
             </div>
 
-            <!-- Task Manager -->
+            <!-- Bio-Sustenance AI -->
+            <div class="glass-card module-card">
+                <div class="card-header">
+                    <h3>💧 Bio-Sustenance</h3>
+                    <div id="bio-status" style="font-size:0.75rem;font-weight:600;color:#3b82f6;">MONITORING</div>
+                </div>
+                <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Dynamic tracking of cognitive dehydration and postural fatigue.</p>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span style="color:var(--text-muted); font-size:0.85rem;">Hydration Level:</span>
+                    <span id="hydration-val" style="color:#3b82f6; font-size:0.85rem; font-weight:bold;">100%</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;height:8px;margin-bottom:15px;">
+                    <div id="hydration-bar" style="height:100%;width:100%;background:#3b82f6;transition:width 1s;"></div>
+                </div>
+                <button class="btn btn-secondary" id="btn-log-water">💧 Log Water Intake</button>
+            </div>
+
+            <!-- Neuro-Tasks -->
             <div class="glass-card module-card" id="task-manager-card">
                 <div class="card-header">
                     <h3>🧠 Neuro-Tasks</h3>
                 </div>
-                <div style="padding: 0.5rem 0;">
-                    <div style="display: flex; gap: 8px; margin-bottom: 1.5rem;">
-                        <input type="text" id="new-task-input" placeholder="Neural task..." style="flex: 1; padding: 10px; border-radius: 10px; border: none; background: rgba(0,0,0,0.3); color: white; font-size: 0.85rem;">
-                        <button id="btn-add-task" class="btn btn-secondary" style="width: auto; padding: 0 15px;">+</button>
+                <div style="padding:0.5rem 0;">
+                    <div style="display:flex;gap:8px;margin-bottom:1.5rem;">
+                        <input type="text" id="new-task-input" placeholder="Neural task..." style="flex:1;padding:10px;border-radius:10px;border:none;background:rgba(0,0,0,0.3);color:white;font-size:0.85rem;">
+                        <button id="btn-add-task" class="btn btn-secondary" style="width:auto;padding:0 15px;">+</button>
                     </div>
-                    <ul id="task-list" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;"></ul>
+                    <ul id="task-list" style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;"></ul>
                 </div>
             </div>
-        </section>
 
+        </section>
     </main>
 
     <!-- LOADING OVERLAY -->
     <div class="loader-overlay" id="global-loader">
         <div class="spinner"></div>
-        <p style="letter-spacing: 5px; font-weight: 300; text-transform: uppercase;">Synchronizing Neural Core</p>
+        <p style="letter-spacing:5px;font-weight:300;text-transform:uppercase;">Synchronizing Neural Core</p>
     </div>
 
     <script src="app.js"></script>

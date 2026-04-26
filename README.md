@@ -1,65 +1,58 @@
-# 🧠 NeuroSense AI | Multimodal Stress Detector
+# 🧠 NeuroSense AI | Cybernetic Stress Intelligence
 
-NeuroSense AI is a state-of-the-art mental health monitoring system that leverages **Computer Vision**, **Signal Processing**, and **Natural Language Processing** to detect and track cognitive stress in real-time.
+NeuroSense AI is a state-of-the-art mental health monitoring system and biometric operating system. It leverages **Computer Vision**, **Signal Processing**, and **Natural Language Processing** to detect, track, and actively mitigate cognitive stress in real-time.
 
-## 🚀 Key Features
-- **Triple Fusion Scoring**: Combines Face (40%), Voice (40%), and Text (20%) data into a single Master stress Index.
-- **Visual Analytics**: Real-time emotion scanning using DeepFace.
-- **Acoustic Profiling**: Advanced MFCC extraction via Librosa to detect vocal resonance stress.
-- **Sentiment Analysis**: Text-based cognitive syntax analysis using TextBlob.
-- **Persistent Intelligence**: Historical data storage using SQLite for long-term tracking.
-- **Premium UI/UX**: Glassmorphism design with dynamic high-stress background alerts.
+---
+
+## 🚀 Cybernetic Features
+- **Multi-Modal Biometric Fusion**: Real-time correlation of Face, Voice, and NLP telemetry.
+- **Ergonomic Posture AI**: Uses MediaPipe to track spinal alignment. If slouching is detected for extended periods, the system triggers a visual lockout.
+- **💧 Bio-Sustenance Tracker**: An intelligent hydration bar that drains twice as fast if your cognitive stress score spikes.
+- **🌊 Flow State Streaks**: Monitors your zen state and rewards consecutive minutes of uninterrupted deep focus.
+- **🌙 Circadian Rhythm Sync (Zen Theme)**: Automatically transitions the UI from high-contrast cybernetic neon to a soothing, low-blue-light amber theme if high stress is detected after 6:00 PM.
+- **📝 AI Cognitive Journal**: Allows you to type free-form thoughts. The NLP engine processes your entry, logs your emotional state, and delivers immediate psychological insights.
+- **Persistent Intelligence**: Historical data tracking stored via SQLite with Write-Ahead Logging (WAL) for concurrency.
+- **Neuro-Tasks**: A built-in task manager that visually syncs with your cognitive load.
 
 ## 🏗️ Technical Stack
 - **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Glassmorphism), Chart.js
-- **Backend**: Python, Flask, Flask-CORS, SQLite
+- **Backend**: Python, Flask, Flask-CORS, SQLite3
 - **AI Models**: 
-  - **Face**: DeepFace (VGG-Face)
+  - **Face**: MediaPipe (Face Mesh/Pose) & DeepFace (Emotion Tracking)
   - **Voice**: Librosa & NumPy (Feature Analysis)
-  - **Text**: TextBlob (Sentiment & Subjectivity)
+  - **Text**: HuggingFace Transformers (DistilRoBERTa Sentiment)
 
 ## 🛠️ Setup & Installation
 
 ### 1. Requirements
-Ensure you have Python 3.10+ installed.
+Ensure you have Python 3.10+ installed on your system.
 
 ### 2. Install Dependencies
 Run the following command in your terminal:
 ```bash
-pip install flask flask-cors opencv-python deepface tensorflow tf-keras librosa soundfile textblob
+pip install -r backend/requirements.txt
 ```
 
 ### 3. Initialize Models
-On the first run, the system will download the necessary ML weights (~150MB).
+On the first run, the backend will download the necessary NLP and Vision weights to local memory. Please allow 30-60 seconds for initialization.
 
 ## 🏃 Running the Application
 
-### 1. Start the API (Terminal 1)
+This application requires two terminals running simultaneously.
+
+### 1. Start the API Backend (Terminal 1)
 ```bash
-cd backend
-python app.py
+python backend/app.py
 ```
+*(Runs on `http://127.0.0.1:5001`)*
 
-### 2. Start the Frontend (Terminal 2)
-Since camera access is restricted on `file://` protocols, use a local server:
+### 2. Start the Frontend Server (Terminal 2)
 ```bash
-cd frontend
-python -m http.server 8080
+python serve.py
 ```
-Then navigate to: **http://localhost:8080**
+*(Runs on `http://127.0.0.1:8000`)*
 
-## 📊 Roadmap Completion
-- [x] **Day 1**: Individual Model Integration & API Routes
-- [x] **Day 2**: SQLite Persistence, Weighted Fusion, and Advanced Results UI
-- [x] **Day 3**: UI Polish, Global History Polling, and Report Export
-
-## 📝 Usage Guide
-1. **Calibrate**: Perform a face scan in normal lighting.
-2. **Vocal Test**: Record a 5-second voice clip describing your day.
-3. **Sentiment Log**: Type a quick summary of your current feelings.
-4. **Monitor**: Watch the Master Fusion Index update. If it turns RED, the system will recommend a break!
+Open your browser and navigate to: **http://localhost:8000**
 
 ---
-*Created with ❤️ by the NeuroSense AI Team*
-# Weights Verified 
-# API Final Docs 
+*Developed with advanced autonomous intervention logic.*

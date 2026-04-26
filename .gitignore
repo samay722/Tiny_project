@@ -17,3 +17,9 @@ stress_history.db
 # OS
 .DS_Store
 Thumbs.db
+
+# Ignored Folders
+ml_env/
+scratch/
+temp/
+*.db

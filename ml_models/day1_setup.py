@@ -1,15 +1,4 @@
-"""
-YOUR DAY 1 ML ENGINEER TASKS:
 
-1. Setup environment locally (use backend/requirements.txt tomorrow)
-2. Download RAVDESS Dataset. Run the `download_ravdess()` below 
-   or manually get it from Kaggle.
-3. Start building the actual ML architecture internally here.
-
-TOMORROW (Day 2):
-The backend engineer will import from `models.py` into `backend/app.py`
-and replace the random scores with actual `.predict()` calls!
-"""
 
 import os
 import urllib.request
