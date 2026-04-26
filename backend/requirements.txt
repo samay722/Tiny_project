@@ -1,5 +1,12 @@
-Flask==3.0.0
-flask-cors==4.0.0
-opencv-python
+flask
+flask-cors
+opencv-python-headless
 deepface
-# API Setup 
+librosa
+mediapipe
+transformers
+tensorflow
+tf-keras
+requests
+scipy
+numpy

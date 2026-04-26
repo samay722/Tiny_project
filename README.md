@@ -38,6 +38,15 @@ On the first run, the backend will download the necessary NLP and Vision weights
 
 ## 🏃 Running the Application
 
+### Option A: Running with Docker (Recommended)
+If you have Docker installed, you can launch the entire ecosystem with a single command:
+```bash
+docker-compose up --build
+```
+*   **Frontend**: http://localhost:8000
+*   **Backend**: http://localhost:5001
+
+### Option B: Running Manually
 This application requires two terminals running simultaneously.
 
 ### 1. Start the API Backend (Terminal 1)
