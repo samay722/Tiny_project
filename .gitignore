@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Flask/ML Temporary Files
+backend/temp_face.jpg
+backend/temp_audio.webm
+temp/
+
+# Database
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Virtual Environments
+ml_env/
+scratch/
