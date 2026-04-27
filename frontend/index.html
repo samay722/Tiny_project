@@ -41,4 +41,48 @@
                     <div class="overlay-scan"></div>
                     
                     <!-- Gaze Visualization Dot -->
+                    <div id="gaze-dot" style="position: absolute; width: 18px; height: 18px; background: var(--accent-secondary); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 20px var(--accent-secondary); border: 2px solid #fff; z-index: 20;"></div>
+                    <div id="focus-halo"></div>
+
+                    <!-- Calibration Overlay -->
+                    <div id="calibration-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.95); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 30;">
+                        <div class="calibration-target" style="width: 50px; height: 50px; border: 3px solid var(--accent-primary); border-radius: 50%; animation: float 1s infinite alternate;"></div>
+                        <p style="margin-top: 1.5rem; font-weight: 600; letter-spacing: 2px;">CALIBRATING NEURAL FIELD</p>
+                        <p id="calib-timer" style="font-size: 3rem; font-weight: 800; color: var(--accent-primary);">5</p>
+                    </div>
+
+                    <!-- AI Vitals HUD -->
+                    <div id="vitals-overlay" style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 8px 12px; border-radius: 10px; font-family: monospace; font-size: 0.75rem; color: #fff; z-index: 25; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="margin-bottom: 4px;">ðŸ’“ HR: <span id="val-bpm" style="color: var(--accent-secondary);">--</span></div>
+                        <div style="margin-bottom: 4px;">ðŸ‘ï¸ Gaze: <span id="val-gaze" style="color: var(--accent-primary);">--</span></div>
+                        <div style="margin-bottom: 4px;">ðŸ§˜ Posture: <span id="val-posture" style="color: #6366f1;">Analyzing...</span></div>
+                        <div style="margin-bottom: 4px;">ðŸ’¤ Fatigue: <span id="val-fatigue" style="color: #f472b6;">Alert</span></div>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px; padding-top: 4px; color: #94a3b8; font-size: 0.65rem;">
+                            ðŸ‘» Neural Twin: <span id="val-twin" style="color: #10b981;">--</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                    <input type="checkbox" id="privacy-toggle" style="accent-color: var(--accent-primary); width: 18px; height: 18px;">
+                    <label for="privacy-toggle" style="font-size: 0.85rem; color: var(--text-muted);">Enable Neural Privacy Obfuscation</label>
+                </div>
+                <button class="btn btn-primary" id="btn-analyze-face">Scan Neural Field</button>
+            </div>
+
+            <!-- ðŸŽ™ï¸ Vocal Resonance -->
+            <div class="glass-card module-card">
+                <div class="card-header">
+                    <h3>ðŸŽ™ï¸ Vocal Analysis</h3>
+                </div>
+                <div class="audio-container" style="height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4);">
+                    <div class="visualizer" id="audio-visualizer" style="display: flex; gap: 6px; height: 60px; align-items: flex-end;">
+                        <span class="bar" style="width: 8px; background: var(--accent-primary); border-radius: 4px; height: 10px;"></span>
+                        <span class="bar" style="width: 8px; background: var(--accent-primary); border-radius: 4px; height: 10px;"></span>
+                        <span class="bar" style="width: 8px; background: var(--accent-primary); border-radius: 4px; height: 10px;"></span>
+                    </div>
+                    <p id="recording-time" style="font-family: monospace; font-size: 1.5rem; margin-top: 1rem; color: var(--accent-secondary);">00:00</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-secondary" id="btn-mic-start">ðŸŽ¤ Record</button>
+                    <button class="btn btn-primary" id="btn-analyze-voice" disabled>Analyze Pitch</button>
 </body></html>
