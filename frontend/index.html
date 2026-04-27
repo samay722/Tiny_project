@@ -128,4 +128,48 @@
                             <div style="display: flex; gap: 8px; margin-top: 5px;">
                                 <div class="mini-bar"><div id="bar-face"></div></div>
                                 <div class="mini-bar"><div id="bar-voice"></div></div>
+                                <div class="mini-bar"><div id="bar-text"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="chart-container">
+                    <h3 style="margin-bottom: 1.5rem; font-family: var(--font-heading);">Biometric Timeline</h3>
+                    <canvas id="historyChart"></canvas>
+                    <button class="btn btn-secondary" id="btn-download-report" style="margin-top: 2rem; width: auto;">ðŸ“¥ Export Report (PDF)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ELITE INTELLIGENCE REPORT -->
+        <section class="glass-card" style="margin-bottom: 3rem; border-left: 4px solid var(--accent-secondary);">
+            <h2 class="section-title">ðŸ§  Neural Intelligence Report</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
+                <div class="intel-item">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">HRV Index</p>
+                    <p id="val-hrv" style="font-size: 2rem; font-weight: 800; color: #fff;">--</p>
+                </div>
+                <div class="intel-item">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Cognitive Reserve</p>
+                    <p id="val-reserve" style="font-size: 2rem; font-weight: 800; color: var(--accent-primary);">--</p>
+                </div>
+                <div class="intel-item">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Personal Baseline</p>
+                    <p id="val-baseline" style="font-size: 2rem; font-weight: 800; color: var(--safe);">--</p>
+                </div>
+                <div class="intel-item">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Fatigue Risk</p>
+                    <p id="val-fatigue-risk" style="font-size: 2rem; font-weight: 800; color: #fff;">Low</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECONDARY SYSTEMS -->
+        <section class="card-grid">
+            <!-- Radar Profile -->
+            <div class="glass-card module-card">
+                <div class="card-header">
+                    <h3>ðŸ§¬ Neuro-Signature</h3>
 </body></html>
