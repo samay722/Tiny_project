@@ -172,4 +172,47 @@
             <div class="glass-card module-card">
                 <div class="card-header">
                     <h3>ðŸ§¬ Neuro-Signature</h3>
-</body></html>
+                </div>
+                <div id="profile-details" style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <canvas id="radarChart" style="max-width: 220px;"></canvas>
+                    <div id="profile-text" style="text-align: center; font-size: 0.85rem; color: var(--text-muted);">Analyzing signatures...</div>
+                </div>
+            </div>
+
+            <!-- AI Engine Control -->
+            <div class="glass-card module-card">
+                <div class="card-header">
+                    <h3>ðŸŽ§ Ambient Engine</h3>
+                    <div id="sound-status" style="font-size: 0.75rem; font-weight: 600; color: var(--accent-primary);">IDLE</div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Neural-matched audio frequencies to modulate cognitive load.</p>
+                <button class="btn btn-primary" id="btn-toggle-sound">Initialize Audio Stream</button>
+                <audio id="ambient-player" loop></audio>
+            </div>
+
+            <!-- Task Manager -->
+            <div class="glass-card module-card" id="task-manager-card">
+                <div class="card-header">
+                    <h3>ðŸ§  Neuro-Tasks</h3>
+                </div>
+                <div style="padding: 0.5rem 0;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 1.5rem;">
+                        <input type="text" id="new-task-input" placeholder="Neural task..." style="flex: 1; padding: 10px; border-radius: 10px; border: none; background: rgba(0,0,0,0.3); color: white; font-size: 0.85rem;">
+                        <button id="btn-add-task" class="btn btn-secondary" style="width: auto; padding: 0 15px;">+</button>
+                    </div>
+                    <ul id="task-list" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;"></ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loader-overlay" id="global-loader">
+        <div class="spinner"></div>
+        <p style="letter-spacing: 5px; font-weight: 300; text-transform: uppercase;">Synchronizing Neural Core</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
