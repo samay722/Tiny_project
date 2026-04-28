@@ -198,3 +198,53 @@ async function sendToBackend(endpoint, payload, isFormData = false) {
             
             const halo = document.getElementById('focus-halo');
             if (halo) {
+                if (data.dominant_emotion.startsWith('EXCEPTIONAL')) halo.classList.add('active');
+                else halo.classList.remove('active');
+            }
+            
+            const gazeDot = document.getElementById('gaze-dot');
+            const gazeStatus = data.details?.gaze_stability;
+            if (gazeDot && gazeStatus) {
+                gazeDot.style.opacity = "1";
+                if (gazeStatus === "Looking Left") { gazeDot.style.left = "20%"; gazeDot.style.top = "50%"; }
+                else if (gazeStatus === "Looking Right") { gazeDot.style.left = "80%"; gazeDot.style.top = "50%"; }
+                else if (gazeStatus === "Centered") { gazeDot.style.left = "50%"; gazeDot.style.top = "50%"; }
+            }
+        }
+        
+        updateDashboard(data.global_score, data.stress_score, data.source, data.smart_tip, data.is_anomaly);
+        fetchHistory();
+        fetchNeuralTwin(); // Update ghost on every analysis
+    } catch (err) {
+        console.error("Backend Error", err);
+    } finally { hideLoader(); }
+}
+
+function updateDashboard(globalScore, localScore, source, tip, isAnomaly) {
+    const scoreEl = document.getElementById('stress-score');
+    if (scoreEl) scoreEl.innerText = globalScore;
+
+    let color = globalScore < 40 ? COLORS.safe : (globalScore < 75 ? COLORS.warning : COLORS.critical);
+    const gauge = document.getElementById('stress-gauge');
+    if (gauge) {
+        gauge.style.background = `conic-gradient(${color} ${globalScore}%, rgba(15, 23, 42, 0.5) 0%)`;
+        gauge.style.boxShadow = `0 0 30px ${color}80`;
+    }
+
+    const statusEl = document.getElementById('stress-status');
+    if (statusEl) {
+        statusEl.innerText = isAnomaly ? "âš ï¸ ACUTE SPIKE" : (globalScore < 40 ? "Calm" : "Elevated");
+        statusEl.style.color = color;
+    }
+
+    const bar = document.getElementById(`bar-${source.toLowerCase()}`);
+    if (bar) bar.style.width = `${localScore}%`;
+}
+
+async function fetchHistory() {
+    try {
+        const res = await fetch(`${API_URL}/history`);
+        const data = await res.json();
+        
+        // Update Burnout Risk
+        const burnoutEl = document.getElementById('val-burnout');
