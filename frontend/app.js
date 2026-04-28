@@ -158,3 +158,43 @@ async function setupMic() {
             } catch (err) { alert("Mic Error: " + err.message); }
         } else {
             mediaRecorder.stop();
+            clearInterval(recordInterval);
+            isRecording = false;
+            btnMic.innerHTML = "ðŸŽ¤ Record";
+            btnMic.style.background = "";
+        }
+    });
+}
+
+async function sendToBackend(endpoint, payload, isFormData = false) {
+    showLoader();
+    try {
+        const options = { method: 'POST' };
+        if (isFormData) options.body = payload;
+        else {
+            options.headers = { 'Content-Type': 'application/json' };
+            options.body = JSON.stringify(payload);
+        }
+
+        const res = await fetch(`${API_URL}${endpoint}`, options);
+        const data = await res.json();
+        
+        // Update UI
+        if (data.source === 'face') {
+            const bpmEl = document.getElementById('val-bpm');
+            const gazeHUD = document.getElementById('val-gaze');
+            const postureEl = document.getElementById('val-posture');
+            const fatigueEl = document.getElementById('val-fatigue');
+            if (bpmEl) bpmEl.innerText = data.heart_rate || '--';
+            if (gazeHUD) gazeHUD.innerText = data.details?.gaze_stability || '--';
+            if (postureEl) {
+                postureEl.innerText = data.details?.posture || 'Detecting...';
+                postureEl.style.color = (data.details?.posture === 'Slouching') ? COLORS.critical : '#6366f1';
+            }
+            if (fatigueEl) {
+                fatigueEl.innerText = data.details?.fatigue || 'Alert';
+                fatigueEl.style.color = (data.details?.fatigue === 'Drowsy') ? COLORS.secondary : '#f472b6';
+            }
+            
+            const halo = document.getElementById('focus-halo');
+            if (halo) {
