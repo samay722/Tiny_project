@@ -78,3 +78,43 @@ class NeuralBackground {
                 if (dist < this.connectionDist) {
                     this.ctx.beginPath();
                     this.ctx.moveTo(p.x, p.y);
+                    this.ctx.lineTo(p2.x, p2.y);
+                    const alpha = Math.floor((1 - dist/this.connectionDist) * 180).toString(16).padStart(2, '0');
+                    this.ctx.strokeStyle = color + alpha; 
+                    this.ctx.lineWidth = 1.2; // Thicker lines
+                    this.ctx.stroke();
+                }
+            }
+        });
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+var tasks = [
+    { text: "Reply to critical emails", done: false },
+    { text: "Architect database schema", done: false }
+];
+
+const SOUNDS = {
+    safe: 'https://actions.google.com/sounds/v1/weather/rain_on_roof.ogg',
+    warning: 'https://actions.google.com/sounds/v1/ambient/park_ambience.ogg',
+    critical: 'https://actions.google.com/sounds/v1/ambient/soft_wind_and_rain.ogg'
+};
+
+const FALLBACK_SOUND = "data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YTv9Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pw==";
+
+// --- CORE FUNCTIONS ---
+
+async function initWebcam() {
+    const video = document.getElementById('webcam-feed');
+    if (!video) return;
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { width: { ideal: 640 }, height: { ideal: 480 } } 
+        });
+        video.srcObject = stream;
+        console.log("Webcam Online");
+    } catch (err) {
+        console.error("Webcam Error", err);
+        const errorDiv = document.createElement('div');
