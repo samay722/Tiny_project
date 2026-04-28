@@ -38,3 +38,43 @@ class NeuralBackground {
     }
     resize() {
         this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+    init() {
+        for (let i = 0; i < this.particleCount; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                vx: (Math.random() - 0.5) * 1.5, // Faster base speed
+                vy: (Math.random() - 0.5) * 1.5,
+                size: Math.random() * 4 + 2 // Bigger neurons
+            });
+        }
+        this.animate();
+    }
+    animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        const score = parseInt(document.getElementById('stress-score').innerText) || 20;
+        const speedMult = 1 + (score / 50); // Speed up based on stress
+        const color = score > 75 ? '#ef4444' : (score > 40 ? '#f59e0b' : '#818cf8');
+
+        this.particles.forEach((p, i) => {
+            p.x += p.vx * speedMult;
+            p.y += p.vy * speedMult;
+            if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
+
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            this.ctx.fillStyle = color + 'cc'; // More opaque
+            this.ctx.shadowBlur = 15; // Add glow
+            this.ctx.shadowColor = color;
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0; // Reset for performance
+
+            for (let j = i + 1; j < this.particles.length; j++) {
+                const p2 = this.particles[j];
+                const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if (dist < this.connectionDist) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(p.x, p.y);
