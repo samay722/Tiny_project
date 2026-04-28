@@ -118,3 +118,43 @@ async function initWebcam() {
     } catch (err) {
         console.error("Webcam Error", err);
         const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = "position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); color:white; display:flex; align-items:center; justify-content:center; padding:20px; text-align:center; z-index:100;";
+        errorDiv.innerHTML = `<p>âŒ Camera Failed: ${err.name}</p>`;
+        video.parentElement.appendChild(errorDiv);
+    }
+}
+
+async function setupMic() {
+    const btnMic = document.getElementById('btn-mic-start');
+    const visualizer = document.getElementById('audio-visualizer');
+    const btnAnalyzeVoice = document.getElementById('btn-analyze-voice');
+    const timerEl = document.getElementById('recording-time');
+
+    if (!btnMic) return;
+
+    btnMic.addEventListener('click', async () => {
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    window.currentAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    btnAnalyzeVoice.removeAttribute('disabled');
+                    stream.getTracks().forEach(t => t.stop());
+                };
+                mediaRecorder.start();
+                isRecording = true;
+                btnMic.innerHTML = "ðŸ›‘ Stop";
+                btnMic.style.background = "#ef4444";
+                seconds = 0;
+                recordInterval = setInterval(() => {
+                    seconds++;
+                    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+                    const s = String(seconds % 60).padStart(2, '0');
+                    timerEl.innerText = `${m}:${s}`;
+                }, 1000);
+            } catch (err) { alert("Mic Error: " + err.message); }
+        } else {
+            mediaRecorder.stop();
