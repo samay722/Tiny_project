@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@
     <!-- Executive Header -->
     <header class="glass-header">
         <div class="logo">
-            <span class="logo-icon">ðŸ§¬</span>
+            <span class="logo-icon">🧬</span>
             <h1>NeuroSense <span class="highlight">Core</span></h1>
         </div>
         <p class="subtitle">Next-Gen Multi-Modal Biometric Matrix</p>
@@ -31,10 +31,10 @@
         <!-- MODULES GRID -->
         <section class="card-grid">
             
-            <!-- ðŸ“· Visual Matrix -->
+            <!-- 📷 Visual Matrix -->
             <div class="glass-card module-card" id="card-visual">
                 <div class="card-header">
-                    <h3>ðŸ“· Visual Analysis</h3>
+                    <h3>📷 Visual Analysis</h3>
                 </div>
                 <div class="video-container">
                     <video id="webcam-feed" autoplay playsinline></video>
@@ -53,12 +53,12 @@
 
                     <!-- AI Vitals HUD -->
                     <div id="vitals-overlay" style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 8px 12px; border-radius: 10px; font-family: monospace; font-size: 0.75rem; color: #fff; z-index: 25; border: 1px solid rgba(255,255,255,0.1);">
-                        <div style="margin-bottom: 4px;">ðŸ’“ HR: <span id="val-bpm" style="color: var(--accent-secondary);">--</span></div>
-                        <div style="margin-bottom: 4px;">ðŸ‘ï¸ Gaze: <span id="val-gaze" style="color: var(--accent-primary);">--</span></div>
-                        <div style="margin-bottom: 4px;">ðŸ§˜ Posture: <span id="val-posture" style="color: #6366f1;">Analyzing...</span></div>
-                        <div style="margin-bottom: 4px;">ðŸ’¤ Fatigue: <span id="val-fatigue" style="color: #f472b6;">Alert</span></div>
+                        <div style="margin-bottom: 4px;">💓 HR: <span id="val-bpm" style="color: var(--accent-secondary);">--</span></div>
+                        <div style="margin-bottom: 4px;">👁️ Gaze: <span id="val-gaze" style="color: var(--accent-primary);">--</span></div>
+                        <div style="margin-bottom: 4px;">🧘 Posture: <span id="val-posture" style="color: #6366f1;">Analyzing...</span></div>
+                        <div style="margin-bottom: 4px;">💤 Fatigue: <span id="val-fatigue" style="color: #f472b6;">Alert</span></div>
                         <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px; padding-top: 4px; color: #94a3b8; font-size: 0.65rem;">
-                            ðŸ‘» Neural Twin: <span id="val-twin" style="color: #10b981;">--</span>
+                            👻 Neural Twin: <span id="val-twin" style="color: #10b981;">--</span>
                         </div>
                     </div>
                 </div>
@@ -69,10 +69,10 @@
                 <button class="btn btn-primary" id="btn-analyze-face">Scan Neural Field</button>
             </div>
 
-            <!-- ðŸŽ™ï¸ Vocal Resonance -->
+            <!-- 🎙️ Vocal Resonance -->
             <div class="glass-card module-card">
                 <div class="card-header">
-                    <h3>ðŸŽ™ï¸ Vocal Analysis</h3>
+                    <h3>🎙️ Vocal Analysis</h3>
                 </div>
                 <div class="audio-container" style="height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4);">
                     <div class="visualizer" id="audio-visualizer" style="display: flex; gap: 6px; height: 60px; align-items: flex-end;">
@@ -83,15 +83,15 @@
                     <p id="recording-time" style="font-family: monospace; font-size: 1.5rem; margin-top: 1rem; color: var(--accent-secondary);">00:00</p>
                 </div>
                 <div style="display: flex; gap: 1rem;">
-                    <button class="btn btn-secondary" id="btn-mic-start">ðŸŽ¤ Record</button>
+                    <button class="btn btn-secondary" id="btn-mic-start">🎤 Record</button>
                     <button class="btn btn-primary" id="btn-analyze-voice" disabled>Analyze Pitch</button>
                 </div>
             </div>
 
-            <!-- ðŸ“ Cognitive Flux -->
+            <!-- 📝 Cognitive Flux -->
             <div class="glass-card module-card">
                 <div class="card-header">
-                    <h3>ðŸ“ Cognitive Analysis</h3>
+                    <h3>📝 Cognitive Analysis</h3>
                 </div>
                 <div class="text-container">
                     <textarea id="nlp-text" placeholder="Stream of consciousness entry..." style="width: 100%; height: 220px; background: transparent; border: none; color: #fff; padding: 1.5rem; resize: none; font-family: var(--font-body);"></textarea>
@@ -104,7 +104,7 @@
 
         <!-- ANALYTICS SUITE -->
         <section class="glass-card analytics-section">
-            <h2 class="section-title">ðŸ“Š Intelligence Dashboard</h2>
+            <h2 class="section-title">📊 Intelligence Dashboard</h2>
             
             <div class="results-layout">
                 <!-- Gauge -->
@@ -138,14 +138,14 @@
                 <div class="chart-container">
                     <h3 style="margin-bottom: 1.5rem; font-family: var(--font-heading);">Biometric Timeline</h3>
                     <canvas id="historyChart"></canvas>
-                    <button class="btn btn-secondary" id="btn-download-report" style="margin-top: 2rem; width: auto;">ðŸ“¥ Export Report (PDF)</button>
+                    <button class="btn btn-secondary" id="btn-download-report" style="margin-top: 2rem; width: auto;">📥 Export Report (PDF)</button>
                 </div>
             </div>
         </section>
 
         <!-- ELITE INTELLIGENCE REPORT -->
         <section class="glass-card" style="margin-bottom: 3rem; border-left: 4px solid var(--accent-secondary);">
-            <h2 class="section-title">ðŸ§  Neural Intelligence Report</h2>
+            <h2 class="section-title">🧠 Neural Intelligence Report</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
                 <div class="intel-item">
                     <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">HRV Index</p>
@@ -171,7 +171,7 @@
             <!-- Radar Profile -->
             <div class="glass-card module-card">
                 <div class="card-header">
-                    <h3>ðŸ§¬ Neuro-Signature</h3>
+                    <h3>🧬 Neuro-Signature</h3>
                 </div>
                 <div id="profile-details" style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
                     <canvas id="radarChart" style="max-width: 220px;"></canvas>
@@ -182,7 +182,7 @@
             <!-- AI Engine Control -->
             <div class="glass-card module-card">
                 <div class="card-header">
-                    <h3>ðŸŽ§ Ambient Engine</h3>
+                    <h3>🎧 Ambient Engine</h3>
                     <div id="sound-status" style="font-size: 0.75rem; font-weight: 600; color: var(--accent-primary);">IDLE</div>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Neural-matched audio frequencies to modulate cognitive load.</p>
@@ -193,7 +193,7 @@
             <!-- Task Manager -->
             <div class="glass-card module-card" id="task-manager-card">
                 <div class="card-header">
-                    <h3>ðŸ§  Neuro-Tasks</h3>
+                    <h3>🧠 Neuro-Tasks</h3>
                 </div>
                 <div style="padding: 0.5rem 0;">
                     <div style="display: flex; gap: 8px; margin-bottom: 1.5rem;">
