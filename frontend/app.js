@@ -318,3 +318,138 @@ function setupTaskManager() {
     taskInput = document.getElementById('new-task-input');
     if (btnAddTask) {
         btnAddTask.addEventListener('click', () => {
+            const val = taskInput.value.trim();
+            if (val) { tasks.push({ text: val, done: false }); taskInput.value = ''; renderTasks(); }
+        });
+    }
+}
+
+function renderTasks() {
+    if (!taskList) return;
+    taskList.innerHTML = '';
+    tasks.forEach((t, i) => {
+        const li = document.createElement('li');
+        li.style.cssText = "display:flex; justify-content:space-between; background:rgba(255,255,255,0.05); padding:10px; border-radius:8px;";
+        li.innerHTML = `<span>${t.text}</span> <button onclick="tasks.splice(${i},1);renderTasks()" style="background:none; border:none; color:red; cursor:pointer;">âœ•</button>`;
+        taskList.appendChild(li);
+    });
+}
+
+function showLoader() { document.getElementById('global-loader')?.classList.add('active'); }
+function hideLoader() { document.getElementById('global-loader')?.classList.remove('active'); }
+
+window.onload = () => {
+    new NeuralBackground();
+    initWebcam();
+    setupMic();
+    initChart();
+    setupTaskManager();
+    renderTasks();
+    fetchHistory();
+    fetchNeuralTwin();
+    fetchIntelligenceReport();
+    
+    // --- Continuous Bio-Monitoring Loop ---
+    // This ensures HR and Gaze update automatically every 3 seconds
+    setInterval(() => {
+        const video = document.getElementById('webcam-feed');
+        if (!video || video.paused || video.ended) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 160; // Lower resolution for background vitals to save bandwidth
+        canvas.height = 120;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        canvas.toBlob(blob => {
+            const fd = new FormData();
+            fd.append('image', blob, 'vitals_frame.jpg');
+            // Use a specialized 'silent' flag or just regular send
+            // We use a simplified version of sendToBackend to avoid showing the loader for every background check
+            fetch(`${API_URL}/analyze/face`, { method: 'POST', body: fd })
+                .then(res => res.json())
+                .then(data => {
+                    const bpmEl = document.getElementById('val-bpm');
+                    const gazeHUD = document.getElementById('val-gaze');
+                    const postureEl = document.getElementById('val-posture');
+                    if (bpmEl) bpmEl.innerText = data.heart_rate || '--';
+                    if (gazeHUD) gazeHUD.innerText = data.details?.gaze_stability || '--';
+                    if (postureEl) {
+                        postureEl.innerText = data.details?.posture || 'Detecting...';
+                        postureEl.style.color = (data.details?.posture === 'Slouching') ? COLORS.critical : '#6366f1';
+                    }
+                    const fatigueEl = document.getElementById('val-fatigue');
+                    if (fatigueEl) {
+                        fatigueEl.innerText = data.details?.fatigue || 'Alert';
+                        fatigueEl.style.color = (data.details?.fatigue === 'Drowsy') ? COLORS.secondary : '#f472b6';
+                    }
+
+                    const halo = document.getElementById('focus-halo');
+                    if (halo) {
+                        if (data.dominant_emotion.startsWith('EXCEPTIONAL')) halo.classList.add('active');
+                        else halo.classList.remove('active');
+                    }
+
+                    // --- NEW: Sync Global Dashboard ---
+                    // This ensures the Gauge and Charts update automatically
+                    if (data.global_score !== undefined) {
+                        updateDashboard(data.global_score, data.stress_score, 'Face', data.smart_tip, data.is_anomaly);
+                    }
+
+                    // Refresh history less frequently to save bandwidth (every 3rd scan ~9s)
+                    if (window.scanCount === undefined) window.scanCount = 0;
+                    window.scanCount++;
+                    if (window.scanCount % 3 === 0) {
+                        fetchHistory();
+                        fetchNeuralTwin();
+                        fetchIntelligenceReport();
+                    }
+                    
+                    const gazeDot = document.getElementById('gaze-dot');
+                    const gazeStatus = data.details?.gaze_stability;
+                    if (gazeDot && gazeStatus) {
+                        gazeDot.style.opacity = "1";
+                        // Smooth transition added in CSS below
+                        if (gazeStatus === "Looking Left") { gazeDot.style.left = "25%"; gazeDot.style.top = "50%"; }
+                        else if (gazeStatus === "Looking Right") { gazeDot.style.left = "75%"; gazeDot.style.top = "50%"; }
+                        else if (gazeStatus === "Centered") { gazeDot.style.left = "50%"; gazeDot.style.top = "50%"; }
+                    }
+                }).catch(e => console.log("Bio-monitor skip..."));
+        }, 'image/jpeg', 0.5);
+    }, 3000);
+
+    // Event Listeners for Analysis
+    document.getElementById('btn-analyze-face')?.addEventListener('click', async (e) => {
+        if (!isCalibrated) {
+            const overlay = document.getElementById('calibration-overlay');
+            const timerEl = document.getElementById('calib-timer');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                for (let i = 5; i > 0; i--) { timerEl.innerText = i; await new Promise(r => setTimeout(r, 1000)); }
+                overlay.style.display = 'none';
+                isCalibrated = true;
+            }
+        }
+        const video = document.getElementById('webcam-feed');
+        const canvas = document.createElement('canvas');
+        canvas.width = 640; canvas.height = 480;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        canvas.toBlob(blob => {
+            const fd = new FormData(); fd.append('image', blob, 'f.jpg');
+            sendToBackend('/analyze/face', fd, true);
+        }, 'image/jpeg');
+    });
+
+    document.getElementById('btn-analyze-voice')?.addEventListener('click', () => {
+        const fd = new FormData(); fd.append('audio', window.currentAudioBlob);
+        sendToBackend('/analyze/voice', fd, true);
+    });
+
+    document.getElementById('btn-analyze-text')?.addEventListener('click', () => {
+        const text = document.getElementById('nlp-text').value;
+        if (text) sendToBackend('/analyze/text', { text });
+    });
+
+    document.getElementById('btn-download-report')?.addEventListener('click', () => {
+        window.location.href = `${API_URL}/download-report`;
+    });
+};
