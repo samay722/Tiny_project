@@ -248,3 +248,73 @@ async function fetchHistory() {
         
         // Update Burnout Risk
         const burnoutEl = document.getElementById('val-burnout');
+        if (burnoutEl && data.burnout_risk) {
+            burnoutEl.innerText = data.burnout_risk;
+            burnoutEl.style.color = data.burnout_risk.includes('CRITICAL') ? COLORS.critical : 
+                                   (data.burnout_risk.includes('High') ? COLORS.warning : '#10b981');
+        }
+
+        if (historyChart && data.history) {
+            const records = data.history.reverse().slice(-10);
+            historyChart.data.labels = records.map(r => r.timestamp.split(' ')[1]);
+            historyChart.data.datasets[0].data = records.map(r => r.score);
+            historyChart.update();
+        }
+        updateProfile(data.history || []);
+    } catch (e) {}
+}
+
+async function fetchNeuralTwin() {
+    try {
+        const res = await fetch(`${API_URL}/api/neural-twin`);
+        const data = await res.json();
+        const twinEl = document.getElementById('val-twin');
+        if (twinEl && data.status === "success") {
+            twinEl.innerText = `${data.twin_score}% (${data.type})`;
+        }
+    } catch (e) {}
+}
+
+async function fetchIntelligenceReport() {
+    try {
+        const res = await fetch(`${API_URL}/api/intelligence-report`);
+        const data = await res.json();
+        document.getElementById('val-hrv').innerText = data.hrv_index;
+        document.getElementById('val-reserve').innerText = data.cognitive_reserve + '%';
+        document.getElementById('val-baseline').innerText = data.personal_baseline + '%';
+        const riskEl = document.getElementById('val-fatigue-risk');
+        riskEl.innerText = data.fatigue_risk;
+        riskEl.style.color = data.fatigue_risk === 'High' ? COLORS.critical : COLORS.safe;
+    } catch (e) {}
+}
+
+function initChart() {
+    const ctx = document.getElementById('historyChart').getContext('2d');
+    historyChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: 'Stress Index', data: [], borderColor: '#818cf8', tension: 0.4 }] },
+        options: { scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+
+    const radarCtx = document.getElementById('radarChart').getContext('2d');
+    radarChart = new Chart(radarCtx, {
+        type: 'radar',
+        data: { labels: ['Visual', 'Vocal', 'Cognitive'], datasets: [{ data: [0,0,0], borderColor: '#f472b6' }] },
+        options: { plugins: { legend: { display: false } } }
+    });
+}
+
+function updateProfile(history) {
+    if (!radarChart) return;
+    const counts = { Face: 0, Voice: 0, Text: 0 };
+    history.forEach(r => { if (r.score > 60) counts[r.type]++; });
+    radarChart.data.datasets[0].data = [counts.Face, counts.Voice, counts.Text];
+    radarChart.update();
+}
+
+function setupTaskManager() {
+    taskList = document.getElementById('task-list');
+    btnAddTask = document.getElementById('btn-add-task');
+    taskInput = document.getElementById('new-task-input');
+    if (btnAddTask) {
+        btnAddTask.addEventListener('click', () => {
