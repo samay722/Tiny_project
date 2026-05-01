@@ -433,66 +433,6 @@ function startFocusTimer() {
     focusInterval=setInterval(tick,1000);
 }
 
-// ============================================================
-// AMBIENT ENGINE
-// ============================================================
-let audioCtx;
-let ambientOsc;
-let ambientGain;
-
-function toggleAmbientSound() {
-    const btn=document.getElementById('btn-toggle-sound');
-    const status=document.getElementById('sound-status');
-    
-    if (isSoundPlaying) {
-        if (ambientGain) ambientGain.gain.setTargetAtTime(0, audioCtx?.currentTime || 0, 0.5);
-        setTimeout(() => {
-            if (ambientOsc) { try { ambientOsc.stop(); ambientOsc.disconnect(); } catch(e){} }
-            if (audioCtx) { audioCtx.suspend(); }
-        }, 500);
-        isSoundPlaying=false;
-        if(btn) btn.innerText='Initialize Audio Stream';
-        if(status) status.innerText='IDLE';
-        showToast('Ambient audio stopped.','info');
-    } else {
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            ambientOsc = audioCtx.createOscillator();
-            ambientGain = audioCtx.createGain();
-            
-            const score=parseInt(document.getElementById('stress-score')?.innerText)||40;
-            
-            // Generate synthetic frequencies instead of external files
-            if (score < 40) {
-                ambientOsc.type = 'sine';
-                ambientOsc.frequency.value = 174; // Safe: 174Hz Healing frequency
-            } else if (score < 75) {
-                ambientOsc.type = 'triangle';
-                ambientOsc.frequency.value = 432; // Warning: 432Hz Grounding frequency
-            } else {
-                ambientOsc.type = 'sine';
-                ambientOsc.frequency.value = 85.2; // Critical: Low frequency drone
-            }
-            
-            ambientOsc.connect(ambientGain);
-            ambientGain.connect(audioCtx.destination);
-            
-            ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
-            ambientGain.gain.setTargetAtTime(0.1, audioCtx.currentTime, 2); // Gentle fade-in
-            
-            ambientOsc.start();
-            isSoundPlaying=true;
-            if(btn) btn.innerText='⏹ Stop Audio';
-            if(status) status.innerText='ACTIVE';
-            showToast(`🎧 Neural frequency stream (${ambientOsc.frequency.value}Hz) active.`,'success');
-        } catch(e) {
-            showToast('Audio engine error. Please interact with the page first.','warning');
-            console.error(e);
-        }
-    }
-}
 
 // ============================================================
 // PRIVACY TOGGLE
@@ -579,8 +519,6 @@ window.onload = () => {
     document.getElementById('btn-trigger-breath')?.addEventListener('click', startBreathing);
     document.getElementById('btn-skip-breath')?.addEventListener('click', stopBreathing);
 
-    // Ambient Engine
-    document.getElementById('btn-toggle-sound')?.addEventListener('click', toggleAmbientSound);
 
     // Task Manager
     document.getElementById('btn-add-task')?.addEventListener('click',()=>{
