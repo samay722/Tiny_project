@@ -12,3 +12,4 @@ scipy
 numpy
 reportlab
 scikit-learn
+mcp

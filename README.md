@@ -2,7 +2,7 @@
   <img src="https://img.shields.io/badge/Status-Active-success.svg?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python" alt="Python">
   <img src="https://img.shields.io/badge/Docker-Supported-2496ED.svg?style=for-the-badge&logo=docker" alt="Docker">
-  <img src="https://img.shields.io/badge/Azure-Ready-0078D4.svg?style=for-the-badge&logo=microsoft-azure" alt="Azure">
+  <img src="https://img.shields.io/badge/Deploy-Vercel+%2B+Render-blueviolet.svg?style=for-the-badge" alt="Deployment">
 
   <h1>🧠 NeuroSense AI</h1>
   <h3>Cybernetic Stress Intelligence & Biometric OS</h3>
@@ -29,13 +29,13 @@ NeuroSense isn't just a dashboard—it's an active entity that reacts to your bi
 
 ```mermaid
 graph TD
-    subgraph Frontend [Cybernetic UI]
+    subgraph Frontend [Vercel]
         UI[Glassmorphism Dashboard]
         Cam[Webcam/Audio Feed]
         Charts[Real-time Chart.js]
     end
 
-    subgraph API [Flask Backend]
+    subgraph Backend [Render - Docker]
         Router[API Routes]
         Manager[Biometric Fusion Engine]
     end
@@ -46,11 +46,11 @@ graph TD
         NLP[HuggingFace DistilRoBERTa]
     end
 
-    subgraph Database
+    subgraph Database [Render Persistent Disk]
         DB[(SQLite WAL)]
     end
 
-    UI <-->|HTTP/REST| Router
+    UI <-->|HTTPS/REST| Router
     Cam --> Vision & Audio
     Router --> Manager
     Manager <--> AI
@@ -82,16 +82,24 @@ python serve.py
 
 <br/>
 
-## ☁️ Deploy to the Cloud (Microsoft Azure)
+## ☁️ Deployment (Vercel + Render)
 
-NeuroSense is configured for a **Serverless multi-container deployment on Azure Container Apps**. 
+### 1. Backend (Render)
+1. Create a new **Web Service** on Render.
+2. Connect your repo and set the **Runtime** to `Docker`.
+3. Add a **Persistent Disk** (2GB) at `/app/data` to keep your biometric history.
+4. Set the **Instance Type** to at least `Starter` (2GB RAM) for ML models.
 
-1. Install the [Azure CLI](https://aka.ms/installazurecliwindows)
-2. Run our automated deployment script:
-```bash
-bash deploy_azure.sh
-```
-*This script will automatically log you in, build the Docker images in the cloud, and deploy them to public URLs!*
+### 2. Frontend (Vercel)
+1. Import your repo into Vercel.
+2. Set the **Root Directory** to `frontend`.
+3. Your `app.js` will automatically detect the production URL and connect to your Render backend.
+
+---
+<div align="center">
+  <b>Built for developers who forget to sit up straight and drink water. 💙</b>
+</div>
+
 
 ---
 <div align="center">

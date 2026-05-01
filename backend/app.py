@@ -83,7 +83,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from sklearn.ensemble import IsolationForest
-    import numpy as np
     SKLEARN_AVAILABLE = True
 except ImportError:
     SKLEARN_AVAILABLE = False
@@ -95,11 +94,13 @@ app = Flask(__name__)
 # Enable CORS so frontend (running locally) can bridge to backend
 CORS(app)
 
-import sqlite3
-
-# Initialize Database — always in project root, never relative to cwd
-_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = os.path.join(_PROJECT_ROOT, 'stress_history.db')
+# Initialize Database — Check for Render Persistent Disk first
+RENDER_DISK_PATH = '/app/data'
+if os.path.exists(RENDER_DISK_PATH):
+    DB_PATH = os.path.join(RENDER_DISK_PATH, 'stress_history.db')
+else:
+    _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    DB_PATH = os.path.join(_PROJECT_ROOT, 'stress_history.db')
 
 def get_db():
     """Get a DB connection with WAL mode and timeout to prevent lock errors."""
@@ -136,7 +137,7 @@ def save_to_db(model_type, score):
 
 @app.route('/history', methods=['GET'])
 def get_history():
-    conn = sqlite3.connect(DB_PATH)
+    conn = get_db()  # Use WAL-enabled helper for consistency
     cursor = conn.cursor()
     cursor.execute("SELECT id, type, score, timestamp FROM stress_logs ORDER BY id DESC LIMIT 50")
     rows = cursor.fetchall()
@@ -369,15 +370,20 @@ def analyze_voice():
     temp_path = "temp_audio.webm"
     audio_file.save(temp_path)
 
-    model = get_voice_model()
-    if model and not isinstance(model, MagicMock):
-        prediction = model.predict(temp_path)
-        score = prediction.get("score", 50)
-        details = prediction.get("details", {})
-    else:
-        print("Fallback: voice_model mock active")
-        score = random.randint(10, 95)
-        details = {}
+    try:
+        model = get_voice_model()
+        if model and not isinstance(model, MagicMock):
+            prediction = model.predict(temp_path)
+            score = prediction.get("score", 50)
+            details = prediction.get("details", {})
+        else:
+            print("Fallback: voice_model mock active")
+            score = random.randint(10, 95)
+            details = {}
+    finally:
+        # Clean up temp file to prevent disk accumulation
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
     save_to_db('Voice', score)
     return jsonify({
@@ -401,17 +407,22 @@ def analyze_face():
     temp_path = "temp_face.jpg"
     image_file.save(temp_path)
     
-    # 1. Integrated Analysis (Consolidated to avoid redundant MediaPipe runs)
-    model = get_face_model()
-    if model and not isinstance(model, MagicMock):
-        prediction = model.predict(temp_path)
-    else:
-        prediction = {
-            "score": random.randint(5, 95),
-            "dominant_emotion": "neutral",
-            "heart_rate": 75,
-            "details": {"posture_status": "Mock", "eye_status": "Mock", "gaze_stability": "Mock", "ear_value": 0.3}
-        }
+    try:
+        # 1. Integrated Analysis (Consolidated to avoid redundant MediaPipe runs)
+        model = get_face_model()
+        if model and not isinstance(model, MagicMock):
+            prediction = model.predict(temp_path)
+        else:
+            prediction = {
+                "score": random.randint(5, 95),
+                "dominant_emotion": "neutral",
+                "heart_rate": 75,
+                "details": {"posture_status": "Mock", "eye_status": "Mock", "gaze_stability": "Mock", "ear_value": 0.3}
+            }
+    finally:
+        # Clean up temp file to prevent disk accumulation
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
     score = prediction.get("score", 50)
     dominant = prediction.get("dominant_emotion", "unknown")
@@ -577,30 +588,33 @@ def analyze_journal():
         text = data.get('text', '')
         if not text:
             return jsonify({"status": "error", "message": "No text provided"}), 400
-            
-        load_nlp_model()
-        
-        # Analyze sentiment
-        result = nlp_pipeline(text)[0]
-        sentiment = result['label']
-        score = result['score']
-        
-        # Determine stress based on model
-        stress_score = 50
-        if sentiment in ['anger', 'sadness', 'fear']:
-            stress_score = int(50 + (score * 50))
-        elif sentiment in ['joy', 'love', 'surprise']:
-            stress_score = int(50 - (score * 50))
-            
+
+        # Use the lazy-loaded NLP model (same pattern as other endpoints)
+        model = get_nlp_model()
+        if model and not isinstance(model, MagicMock):
+            prediction = model.predict(text)
+            stress_score = prediction.get("score", 50)
+            sentiment = prediction.get("details", "neutral")
+        else:
+            # Fallback: keyword-based heuristic
+            print("Fallback: nlp_model mock active for journal")
+            stress_keywords = ['anxious', 'stressed', 'overwhelmed', 'tired', 'frustrated', 'sad', 'angry', 'fear', 'panic']
+            calm_keywords = ['happy', 'good', 'great', 'calm', 'relaxed', 'focused', 'productive', 'joy', 'love']
+            text_lower = text.lower()
+            stress_hits = sum(1 for w in stress_keywords if w in text_lower)
+            calm_hits = sum(1 for w in calm_keywords if w in text_lower)
+            stress_score = min(95, max(10, 50 + (stress_hits * 10) - (calm_hits * 10)))
+            sentiment = "stressed" if stress_hits > calm_hits else ("calm" if calm_hits > stress_hits else "neutral")
+
         save_to_db('Journal', stress_score)
-        
+
         # Generate insight
         insight = "Neutral cognitive state. Keep monitoring."
         if stress_score > 70:
             insight = f"High cognitive load detected ({sentiment}). The phrasing suggests emotional fatigue. Consider taking a mental break."
         elif stress_score < 40:
             insight = f"Positive cognitive flow detected ({sentiment}). Your writing reflects clarity and calm."
-            
+
         return jsonify({
             "status": "success",
             "stress_score": stress_score,

@@ -10,6 +10,20 @@ services:
     environment:
       - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
+  mcp-server:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["python", "mcp_server.py"]
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./stress_history.db:/app/stress_history.db
+    environment:
+      - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+    depends_on:
+      - backend
+
   frontend:
     build: ./frontend
     ports:

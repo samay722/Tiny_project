@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:5001';
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5001' 
+    : 'https://neurosense-api.onrender.com'; // Replace with your Render URL after deployment
 const COLORS = { safe:'#10b981', warning:'#f59e0b', critical:'#ef4444' };
 
 var isSoundPlaying=false, isRecording=false;
@@ -530,7 +532,10 @@ window.onload = () => {
             fetch(`${API_URL}/analyze/face`,{method:'POST',body:fd})
                 .then(r=>r.json()).then(data=>{
                     updateFaceHUD(data);
-                    if(data.global_score!==undefined) updateDashboard(data.global_score,data.stress_score,'Face',data.smart_tip,data.is_anomaly,data.forecast);
+                    if(data.global_score!==undefined) {
+                        updateDashboard(data.global_score,data.stress_score,'Face',data.smart_tip,data.is_anomaly,data.forecast);
+                        fetchHistory(); // 🔄 Refresh chart automatically
+                    }
                 }).catch(()=>{});
         },'image/jpeg',0.5);
     },3000);
