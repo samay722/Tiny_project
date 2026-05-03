@@ -419,10 +419,16 @@ def analyze_face():
                 "heart_rate": 75,
                 "details": {"posture_status": "Mock", "eye_status": "Mock", "gaze_stability": "Mock", "ear_value": 0.3}
             }
+    except Exception as e:
+        print(f"Prediction Error: {e}")
+        prediction = {"score": 50, "dominant_emotion": "unknown", "heart_rate": 72, "details": {}}
     finally:
-        # Clean up temp file to prevent disk accumulation
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
+        # Clean up temp file with safety check for concurrent locks
+        try:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+        except Exception as e:
+            print(f"Cleanup Warning: {e}")
 
     score = prediction.get("score", 50)
     dominant = prediction.get("dominant_emotion", "unknown")
