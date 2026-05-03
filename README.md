@@ -2,7 +2,7 @@
   <img src="https://img.shields.io/badge/Status-Active-success.svg?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python" alt="Python">
   <img src="https://img.shields.io/badge/Docker-Supported-2496ED.svg?style=for-the-badge&logo=docker" alt="Docker">
-  <img src="https://img.shields.io/badge/Deploy-Vercel+%2B+Render-blueviolet.svg?style=for-the-badge" alt="Deployment">
+  <img src="https://img.shields.io/badge/Deploy-Vercel+%2B+HuggingFace-blueviolet.svg?style=for-the-badge" alt="Deployment">
 
   <h1>🧠 NeuroSense AI</h1>
   <h3>Cybernetic Stress Intelligence & Biometric OS</h3>
@@ -35,7 +35,7 @@ graph TD
         Charts[Real-time Chart.js]
     end
 
-    subgraph Backend [Render - Docker]
+    subgraph Backend [Hugging Face Spaces - Docker]
         Router[API Routes]
         Manager[Biometric Fusion Engine]
     end
@@ -46,15 +46,10 @@ graph TD
         NLP[HuggingFace DistilRoBERTa]
     end
 
-    subgraph Database [Render Persistent Disk]
-        DB[(SQLite WAL)]
-    end
-
     UI <-->|HTTPS/REST| Router
     Cam --> Vision & Audio
     Router --> Manager
     Manager <--> AI
-    Manager <--> DB
 ```
 
 <br/>
@@ -66,7 +61,7 @@ Don't want to install Python packages? Just use Docker!
 ```bash
 docker-compose up --build
 ```
-🌐 Dashboard: `http://localhost:8000` | 🔌 API: `http://localhost:5001`
+🌐 Dashboard: `http://localhost:8000` | 🔌 API: `http://localhost:7860`
 
 ### Option B: The Manual Way
 ```bash
@@ -82,26 +77,23 @@ python serve.py
 
 <br/>
 
-## ☁️ Deployment (Vercel + Render)
+## ☁️ Free Deployment (Vercel + Hugging Face)
 
-### 1. Backend (Render)
-1. Create a new **Web Service** on Render.
-2. Connect your repo and set the **Runtime** to `Docker`.
-3. Add a **Persistent Disk** (2GB) at `/app/data` to keep your biometric history.
-4. Set the **Instance Type** to at least `Starter` (2GB RAM) for ML models.
+For a 100% free production environment with high RAM for ML models:
 
-### 2. Frontend (Vercel)
-1. Import your repo into Vercel.
-2. Set the **Root Directory** to `frontend`.
-3. Your `app.js` will automatically detect the production URL and connect to your Render backend.
+### 1. Backend (Hugging Face Spaces) - FREE 16GB RAM
+1. Create a new **Space** on [Hugging Face](https://huggingface.co/new-space).
+2. Select **Docker** as the SDK.
+3. Connect your GitHub repo.
+4. Hugging Face will automatically use the root `Dockerfile` and provide you with a URL like `https://user-space.hf.space`.
+5. **Bonus:** HF Spaces provides 16GB of RAM for free, which is perfect for these ML models.
 
----
-<div align="center">
-  <b>Built for developers who forget to sit up straight and drink water. 💙</b>
-</div>
-
+### 2. Frontend (Vercel) - FREE Static Hosting
+1. Import your GitHub repo into [Vercel](https://vercel.com/new).
+2. The `vercel.json` will automatically route traffic to the `frontend` directory.
+3. Update your `frontend/app.js` with your Hugging Face Space URL.
 
 ---
 <div align="center">
-  <b>Built for developers who forget to sit up straight and drink water. 💙</b>
+  <b>Built for developers who want premium AI features for $0. 💙</b>
 </div>
