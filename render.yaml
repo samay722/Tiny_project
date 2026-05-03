@@ -22,8 +22,6 @@ services:
     runtime: docker
     dockerContext: ./frontend
     dockerfilePath: Dockerfile
-    ports:
-      - 80
     envVars:
       - key: BACKEND_URL
         value: https://neurosense-api.onrender.com # Change this if your API URL is different
