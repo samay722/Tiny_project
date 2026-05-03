@@ -92,7 +92,7 @@ except ImportError:
 
 app = Flask(__name__)
 # Enable CORS so frontend (running locally) can bridge to backend
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Initialize Database — Check for Render Persistent Disk first
 RENDER_DISK_PATH = '/app/data'
