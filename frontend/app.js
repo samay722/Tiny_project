@@ -1,6 +1,8 @@
 const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5001' 
-    : 'https://neurosense-api.onrender.com'; // Replace with your Render URL after deployment
+    : (window.location.hostname.includes('onrender.com') 
+        ? `https://${window.location.hostname.replace('-frontend', '-api')}` 
+        : 'https://neurosense-api.onrender.com');
 const COLORS = { safe:'#10b981', warning:'#f59e0b', critical:'#ef4444' };
 
 var isSoundPlaying=false, isRecording=false;
@@ -581,6 +583,30 @@ window.onload = () => {
             if(streakVal) streakVal.innerText = '0';
         }
     }, 60000); // Check every minute
+
+    // Main initialization wrap
+    const initData = async () => {
+        const safetyTimeout = setTimeout(() => {
+            hideLoader();
+            console.warn("Initialization taking too long, hiding loader via safety timeout.");
+        }, 3000);
+
+        try {
+            await Promise.allSettled([
+                fetchHistory(),
+                fetchNeuralTwin(),
+                fetchIntelligenceReport(),
+                checkApiStatus()
+            ]);
+        } catch (e) {
+            console.error("Initial data fetch failed", e);
+        } finally {
+            clearTimeout(safetyTimeout);
+            hideLoader();
+        }
+    };
+
+    initData();
 };
 
 function updateHydrationUI() {

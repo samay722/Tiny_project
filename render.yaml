@@ -1,4 +1,5 @@
 services:
+  # Backend API Service
   - type: web
     name: neurosense-api
     runtime: docker
@@ -8,7 +9,22 @@ services:
     envVars:
       - key: PORT
         value: 5001
+      - key: PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION
+        value: python
     disk:
       name: neurosense-data
       mountPath: /app/data
       sizeGB: 1
+
+  # Frontend Static Service
+  - type: web
+    name: neurosense-frontend
+    runtime: docker
+    dockerContext: ./frontend
+    dockerfilePath: Dockerfile
+    ports:
+      - 80
+    envVars:
+      - key: BACKEND_URL
+        value: https://neurosense-api.onrender.com # Change this if your API URL is different
+

@@ -19,4 +19,4 @@ COPY ml_models/ ./ml_models/
 
 EXPOSE 5001
 
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "1", "--threads", "8", "--timeout", "0", "app:app"]
